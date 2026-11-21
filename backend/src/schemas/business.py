@@ -26,3 +26,10 @@ class RunInput(BaseModel):
  name:str=Field(min_length=2,max_length=120)
  mapping_id:int
 class RestoreInput(BaseModel):backup:dict
+class QuarantineInput(BaseModel):
+ code:str=Field(default='',max_length=40)
+ title:str=Field(min_length=2,max_length=120)
+ reason:str=Field(default='',max_length=500)
+ test_name:str=Field(min_length=1,max_length=160)
+ measured_from:str=Field(min_length=4,max_length=40)
+ measured_to:str=Field(min_length=4,max_length=40)

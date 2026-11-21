@@ -3,7 +3,7 @@ from fastapi import APIRouter,Depends
 from fastapi.responses import Response
 from src.middlewares.auth import current,writer,admin
 from src.schemas.business import RunInput,RestoreInput
-from src.services import runs
+from src.services import runs,quarantines
 from src.controllers.business import start_run
 from src.services.audit import log
 router=APIRouter()
@@ -18,6 +18,8 @@ def cancel(item_id:int,u=Depends(writer)):
  r=runs.cancel(item_id);log(u.email,'run.cancel',str(item_id));return r
 @router.get('/runs/{item_id}/targets')
 def targets(item_id:int,u=Depends(current)):return runs.targets(item_id)
+@router.get('/runs/{item_id}/isolation')
+def isolation(item_id:int,u=Depends(current)):return quarantines.marks_for_run(item_id)
 @router.get('/runs/{item_id}/backup')
 def backup(item_id:int,u=Depends(current)):
  return Response(json.dumps(runs.backup(item_id),ensure_ascii=False,indent=2),media_type='application/json',headers={'Content-Disposition':f'attachment; filename="backup-{item_id}.json"'})
